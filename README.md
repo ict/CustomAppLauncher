@@ -1,6 +1,6 @@
 # Customizable Application Launcher
 
-Note: This project was written in 2014. It has been uploaded here for historical
+Note: This project some time in 2006. It has been uploaded here for historical
 purposes and to make some slight changes.
 
 ## Purpose
@@ -27,7 +27,7 @@ Program Sections:
 * `Checked=1` will activate the checkbox at startup
 * `Preset` makes this entry active when a certain preset is chosen. Multiple presets can be configured by concatenating the numbers, e.g. `14` means the entry is active in preset 1 and 4
 
-Usage:
+## Usage
 Put launcher.exe and launch.ini in the same directory. Start launcher.exe
 
 Notes:
