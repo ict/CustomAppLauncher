@@ -1,9 +1,5 @@
 #RequireAdmin
 
-; Script: Silent Application Installer
-; Author: ict1986@gmail.com
-Dim Const $Version = "2.1"
-
 #include <Array.au3>
 #include <Math.au3>
 #include <AutoItConstants.au3>
@@ -99,7 +95,7 @@ If $AlwaysOnTop = "1" Then $ExFlags = $WS_EX_TOPMOST
 
 GUICreate($GUItitle, $GUIwidth, $GUIheight, default, default, default, $ExFlags)
 
-Dim $MAINArray[$NumberofEntries][7]  ; 0= Name, 1= Command1, 2=Command2 3=Command3 4=ID (für GUI-Creation nach Sortieren) 5=Tooltip 6=Presetgroups
+Dim $MAINArray[$NumberofEntries][7]  ; 0= Name, 1= Command1, 2=Command2 3=Command3 4=ID (fÃ¼r GUI-Creation nach Sortieren) 5=Tooltip 6=Presetgroups
 For $i = 0 To $NumberofEntries - 1
 	$MAINArray[$i][0] = $INISections[$i + 1]
 	$MAINArray[$i][1] = StringReplace(IniRead($INILocation, $INISections[$i + 1], "Command1", "No Command in .ini found!"), "SOURCE_DRIVE", $Disk)
@@ -216,7 +212,7 @@ Func Close()
 EndFunc
 
 Func Info()
-	MsgBox(64, "About", "ict's customizable silent application installer " & $Version & @CRLF & @CRLF & "Contact: ict1986@gmail.com")
+	MsgBox(64, "About", "Customizable Application Launcher 2020" & @CRLF & @CRLF & "Contact: github.com/ict/CustomAppLauncher")
 EndFunc
 
 Func Clear()
@@ -271,6 +267,5 @@ Func activatePreset($n)
 EndFunc
 
 Func InstallButton()
-	;If MsgBox(36, "Proceed?", "Really install all checked applications?", 10) = 6 Then install()
 	install()
 EndFunc
