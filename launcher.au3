@@ -6,6 +6,8 @@ Dim Const $Version = "2.1"
 
 #include <Array.au3>
 #include <Math.au3>
+#include <AutoItConstants.au3>
+#include <StringConstants.au3>
 #include <GUIConstantsEx.au3>
 #include <WindowsConstants.au3>
 
@@ -15,7 +17,7 @@ Opt("GUIOnEventMode", 1)
 
 
 $INILocation = @ScriptDir & "\launch.ini"
-FileChangeDir($INILocation)
+FileChangeDir(@ScriptDir)
 
 Dim $GUItitle = IniRead($INILocation, "General", "Title", "1337 App Installer")
 Dim $SoftwarePerPage = IniRead($INILocation, "General", "SoftwarePerRow", 20)
@@ -26,27 +28,29 @@ Dim $DiskLabel = StringLower(IniRead($INILocation, "General", "DiskLabel", "no l
 Dim $CleanupCMD = IniRead($INILocation, "General", "CleanupCMD", "")
 Dim $ColumnWidth = Int(IniRead($INILocation, "General", "ColumnWidth", "250"))
 Dim $HiddenState = IniRead($INILocation, "General", "StartHidden", "0")
-Dim $AlwaysOnTop = IniRead($INILocation, "General", "AlwaysOnTop", 0)
+Dim $AlwaysOnTop = IniRead($INILocation, "General", "AlwaysOnTop", "0")
 Dim $Disk
 
-$drives = DriveGetDrive("ALL")
+$drives = DriveGetDrive($DT_REMOVABLE)
 If @error Then
 	MsgBox(17, "Fatal Error", "No Drives detected")
 	Exit(0)
 EndIf
 
 For $i = 1 to $drives[0]
-	If StringLower(DriveGetLabel($drives[$i])) = $DiskLabel Then
+	If StringInStr(DriveGetLabel($drives[$i]), $DiskLabel, $STR_NOCASESENSE) = 1 Then
+		; wanted found at the beginning of drive label
 		$Disk = $drives[$i]
+		ExitLoop
 	EndIf
 Next
 
 If $Disk = "" Then
-	$Disk = InputBox("Error", "DVD could not be found. Please enter drive letter manually", "e:")
+	$Disk = InputBox("Error", "Source drive could not be found. Please enter drive letter manually", "e:")
 	If $Disk = "" Then Exit(1)
 EndIf
 
-$GUItitle = $GUItitle & "  (DVD@" & $Disk & ")"
+$GUItitle = $GUItitle & "  (USB@" & $Disk & ")"
 
 $INISections = IniReadSectionNames($INILocation)
 If @error Then
@@ -91,16 +95,16 @@ Next
 If $SortEntries <> 0 Then _ArraySort($INISections, 0, 1)
 
 Dim $ExFlags = 0
-If $AlwaysOnTop Then $ExFlags = $WS_EX_TOPMOST
+If $AlwaysOnTop = "1" Then $ExFlags = $WS_EX_TOPMOST
 
 GUICreate($GUItitle, $GUIwidth, $GUIheight, default, default, default, $ExFlags)
 
 Dim $MAINArray[$NumberofEntries][7]  ; 0= Name, 1= Command1, 2=Command2 3=Command3 4=ID (für GUI-Creation nach Sortieren) 5=Tooltip 6=Presetgroups
 For $i = 0 To $NumberofEntries - 1
 	$MAINArray[$i][0] = $INISections[$i + 1]
-	$MAINArray[$i][1] = StringReplace(IniRead($INILocation, $INISections[$i + 1], "Command1", "No Command in .ini found!"), "CDROM", $Disk)
-	$MAINArray[$i][2] = StringReplace(IniRead($INILocation, $INISections[$i + 1], "Command2", ""), "CDROM", $Disk)
-	$MAINArray[$i][3] = StringReplace(IniRead($INILocation, $INISections[$i + 1], "Command3", ""), "CDROM", $Disk)
+	$MAINArray[$i][1] = StringReplace(IniRead($INILocation, $INISections[$i + 1], "Command1", "No Command in .ini found!"), "SOURCE_DRIVE", $Disk)
+	$MAINArray[$i][2] = StringReplace(IniRead($INILocation, $INISections[$i + 1], "Command2", ""), "SOURCE_DRIVE", $Disk)
+	$MAINArray[$i][3] = StringReplace(IniRead($INILocation, $INISections[$i + 1], "Command3", ""), "SOURCE_DRIVE", $Disk)
 	$MAINArray[$i][5] = IniRead($INILocation, $INISections[$i + 1], "ToolTip", "")
 	$MAINArray[$i][6] = IniRead($INILocation, $INISections[$i + 1], "Preset", "0")
 
@@ -168,12 +172,12 @@ Func Install()
 			GUICtrlSetFont($MAINArray[$i][4], default, "", 4)
 			If $HiddenState = "1" Then
 				RunWait($MAINArray[$i][1], @ScriptDir, @SW_HIDE)
-				If @error Then MsgBox(48, "Error", "Error launching " & @CRLF & $MAINArray[$i][1] & @CRLF & "Probably 404", 10)
+				If @error Then MsgBox(48, "Error", "Error launching " & @CRLF & $MAINArray[$i][1] & @CRLF & @CRLF & "Working Directory: " & @WorkingDir, 10)
 				If $MAINArray[$i][2] <> "" Then RunWait($MAINArray[$i][2], @ScriptDir, @SW_HIDE)
 				If $MAINArray[$i][3] <> "" Then RunWait($MAINArray[$i][3], @ScriptDir, @SW_HIDE)
 			Else
 				RunWait($MAINArray[$i][1])
-				If @error Then MsgBox(48, "Error", "Error launching " & @CRLF & $MAINArray[$i][1] & @CRLF & "Probably 404", 10)
+				If @error Then MsgBox(48, "Error", "Error launching " & @CRLF & $MAINArray[$i][1] & @CRLF & @CRLF & "Working Directory: " & @WorkingDir, 10)
 				If $MAINArray[$i][2] <> "" Then RunWait($MAINArray[$i][2])
 				If $MAINArray[$i][3] <> "" Then RunWait($MAINArray[$i][3])
 			EndIf
@@ -186,7 +190,7 @@ Func Install()
 		EndIf
 	Next
 	If $CleanupCMD <> "" Then
-		RunWait(StringReplace($CleanupCMD, "CDROM", $Disk))
+		RunWait(StringReplace($CleanupCMD, "SOURCE_DRIVE", $Disk))
 	EndIf
 	If $ExitafterInstall = 1 Then Exit
 	GUICtrlSetState($OKButton, $GUI_ENABLE)
