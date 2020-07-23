@@ -16,9 +16,9 @@ Just edit the included launch.ini file. Refer to the sample file(s) for details.
 
 General section
 * `Title`: The GUI-Window's Title
-* `SoftwarePerRow`: How Many checkboxes per Row
+* `SoftwarePerRow`: How many checkboxes to display per row
 * `ExitafterInstall`: Set to 1 to auto-exit after Installing
-* `TimeOut`: If set to 1, Install will automatically started after n seconds. Use with Checked=1 in Program sections for Auto-Installs.
+* `TimeOut`: If set to a positive number, launching will automatically start after this number of seconds. Use with `Checked=1` in program sections for automatic launches
 * `PresetN`: Define presets that can be chosen from a menu
 
 Program Sections:
