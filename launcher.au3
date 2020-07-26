@@ -28,18 +28,16 @@ Dim $AlwaysOnTop = IniRead($INILocation, "General", "AlwaysOnTop", "0")
 Dim $Disk
 
 $drives = DriveGetDrive($DT_REMOVABLE)
-If @error Then
-	MsgBox(17, "Fatal Error", "No Drives detected")
-	Exit(0)
-EndIf
 
-For $i = 1 to $drives[0]
-	If StringInStr(DriveGetLabel($drives[$i]), $DiskLabel, $STR_NOCASESENSE) = 1 Then
-		; wanted found at the beginning of drive label
-		$Disk = $drives[$i]
-		ExitLoop
-	EndIf
-Next
+If Not @error Then
+   For $i = 1 to $drives[0]
+	   If StringInStr(DriveGetLabel($drives[$i]), $DiskLabel, $STR_NOCASESENSE) = 1 Then
+		   ; wanted found at the beginning of drive label
+		   $Disk = $drives[$i]
+		   ExitLoop
+	  EndIf
+   Next
+EndIf
 
 If $Disk = "" Then
 	$Disk = InputBox("Error", "Source drive could not be found. Please enter drive letter manually", "e:")
