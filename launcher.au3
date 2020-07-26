@@ -149,6 +149,15 @@ WEnd
 
 
 ; ------------ FUNCTIONS------------------
+Func RunWithCheck($command, $workdir, $hide = False)
+   If $hide <> 0 Then
+	  RunWait($command, $workdir, @SW_HIDE)
+   Else
+	  RunWait($command, $workdir)
+   EndIf
+   If @error Then MsgBox(48, "Error", "Error launching " & @CRLF & $command & @CRLF & @CRLF & "Working Directory: " & $workdir, 10)
+EndFunc
+
 Func Install()
 	StopCountdown()
 	Local $count = 0
@@ -164,17 +173,9 @@ Func Install()
 	For $i = 0 To $NumberofEntries - 1
 		If GUICtrlRead($MAINArray[$i][4]) = $GUI_CHECKED Then
 			GUICtrlSetFont($MAINArray[$i][4], default, "", 4)
-			If $HiddenState = "1" Then
-				RunWait($MAINArray[$i][1], @ScriptDir, @SW_HIDE)
-				If @error Then MsgBox(48, "Error", "Error launching " & @CRLF & $MAINArray[$i][1] & @CRLF & @CRLF & "Working Directory: " & @WorkingDir, 10)
-				If $MAINArray[$i][2] <> "" Then RunWait($MAINArray[$i][2], @ScriptDir, @SW_HIDE)
-				If $MAINArray[$i][3] <> "" Then RunWait($MAINArray[$i][3], @ScriptDir, @SW_HIDE)
-			Else
-				RunWait($MAINArray[$i][1])
-				If @error Then MsgBox(48, "Error", "Error launching " & @CRLF & $MAINArray[$i][1] & @CRLF & @CRLF & "Working Directory: " & @WorkingDir, 10)
-				If $MAINArray[$i][2] <> "" Then RunWait($MAINArray[$i][2])
-				If $MAINArray[$i][3] <> "" Then RunWait($MAINArray[$i][3])
-			EndIf
+			RunWithCheck($MAINArray[$i][1], @ScriptDir, $HiddenState)
+			If $MAINArray[$i][2] <> "" Then RunWithCheck($MAINArray[$i][2], @ScriptDir, $HiddenState)
+			If $MAINArray[$i][3] <> "" Then RunWithCheck($MAINArray[$i][3], @ScriptDir, $HiddenState)
 
 			GUICtrlSetState($MAINArray[$i][4], $GUI_UNCHECKED)
 			GUICtrlSetState($MAINArray[$i][4], $GUI_DISABLE)
