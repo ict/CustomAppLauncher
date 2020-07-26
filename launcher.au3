@@ -117,6 +117,7 @@ Next
 
 
 $OKButton = GUICtrlCreateButton("INSTALL!", $GUIwidth / 2 - 75, 3, 150, 35)
+If $TimeOut <> 0 Then GUICtrlCreateLabel("Ctrl-C to stop countdown", $GUIwidth / 2 + 75 + 10, 13)
 $SelectMenu = GUICtrlCreateMenu("&Presets")
 $AboutMenu = GUICtrlCreateMenu("&About")
 $InfoButton = GUICtrlCreateMenuItem("About..", $AboutMenu)
@@ -126,7 +127,6 @@ $SelectNone = GUICtrlCreateMenuItem("&None", $SelectMenu)
 $ProgressBar = GUICtrlCreateProgress(10, $GUIheight - 50, $GUIwidth - 20, 25)
 
 If $TimeOut <> 0 Then
-	MsgBox(32, $GUItitle, "Auto-Installation in " & $Timeout & " seconds." & @CRLF & "Press CTRL-C to Stop Countdown." & @CRLF & "This Message will close in 5 seconds.", 5)
 	AdlibRegister("timeout", 1000)
 	HotKeySet("^c", "StopCountdown")
 EndIf
