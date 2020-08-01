@@ -167,6 +167,7 @@ EndFunc
 
 Func Install()
 	StopCountdown()
+	WinActivate($GUIHandle)
 	Local $count = 0
 	For $i = 0 To $NumberofEntries - 1
 		If GUICtrlRead($MAINArray[$i][4]) = $GUI_CHECKED Then
