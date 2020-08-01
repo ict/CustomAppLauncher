@@ -29,7 +29,7 @@ Dim $HiddenState = IniRead($INILocation, "General", "StartHidden", "0")
 Dim $AlwaysOnTop = IniRead($INILocation, "General", "AlwaysOnTop", "0")
 Dim $Disk
 
-$drives = DriveGetDrive($DT_REMOVABLE)
+$drives = DriveGetDrive($DT_ALL)
 
 If Not @error Then
    For $i = 1 to $drives[0]
