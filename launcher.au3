@@ -17,7 +17,7 @@ FileChangeDir(@ScriptDir)
 
 Dim $GUItitle = IniRead($INILocation, "General", "Title", "1337 App Installer")
 Dim $GUIIcon = IniRead($INILocation, "General", "Icon", "")
-Dim $GUIhandle
+Dim $GUIHandle
 Dim $SoftwarePerPage = IniRead($INILocation, "General", "SoftwarePerRow", 20)
 Dim $SortEntries = IniRead($INILocation, "General", "SortEntries", 1)
 Dim $ExitafterInstall = IniRead($INILocation, "General", "ExitafterInstall", 0)
