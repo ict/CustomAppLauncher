@@ -122,12 +122,14 @@ Next
 
 
 $OKButton = GUICtrlCreateButton("INSTALL!", $GUIwidth / 2 - 75, 3, 150, 35)
-If $TimeOut <> 0 Then GUICtrlCreateLabel("Ctrl-C to stop countdown", $GUIwidth / 2 + 75 + 10, 13)
+$TimeoutText = IniRead($INILocation, "General", "TextCancelCountdown", "Ctrl-C to stop countdown")
+If $TimeOut <> 0 Then GUICtrlCreateLabel($TimeoutText, $GUIwidth / 2 + 75 + 10, 13)
 $SelectMenu = GUICtrlCreateMenu("&Presets")
 $AboutMenu = GUICtrlCreateMenu("&About")
 $InfoButton = GUICtrlCreateMenuItem("About..", $AboutMenu)
 ;$SelectAll = GUICtrlCreateMenuItem("&All", $SelectMenu)
-$SelectNone = GUICtrlCreateMenuItem("&None", $SelectMenu)
+$SelectText = IniRead($INILocation, "General", "TextPresetNone", "&None")
+$SelectNone = GUICtrlCreateMenuItem($SelectText, $SelectMenu)
 
 $ProgressBar = GUICtrlCreateProgress(10, $GUIheight - 50, $GUIwidth - 20, 25)
 
