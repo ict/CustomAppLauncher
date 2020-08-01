@@ -16,6 +16,8 @@ $INILocation = @ScriptDir & "\launch.ini"
 FileChangeDir(@ScriptDir)
 
 Dim $GUItitle = IniRead($INILocation, "General", "Title", "1337 App Installer")
+Dim $GUIIcon = IniRead($INILocation, "General", "Icon", "")
+Dim $GUIhandle
 Dim $SoftwarePerPage = IniRead($INILocation, "General", "SoftwarePerRow", 20)
 Dim $SortEntries = IniRead($INILocation, "General", "SortEntries", 1)
 Dim $ExitafterInstall = IniRead($INILocation, "General", "ExitafterInstall", 0)
@@ -91,7 +93,10 @@ If $SortEntries <> 0 Then _ArraySort($INISections, 0, 1)
 Dim $ExFlags = 0
 If $AlwaysOnTop = "1" Then $ExFlags = $WS_EX_TOPMOST
 
-GUICreate($GUItitle, $GUIwidth, $GUIheight, default, default, default, $ExFlags)
+$GUIHandle = GUICreate($GUItitle, $GUIwidth, $GUIheight, default, default, default, $ExFlags)
+If $GUIIcon <> "" Then
+   GUISetIcon($GUIIcon)
+EndIf
 
 Dim $MAINArray[$NumberofEntries][7]  ; 0= Name, 1= Command1, 2=Command2 3=Command3 4=ID (für GUI-Creation nach Sortieren) 5=Tooltip 6=Presetgroups
 For $i = 0 To $NumberofEntries - 1
