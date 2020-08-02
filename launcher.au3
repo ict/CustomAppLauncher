@@ -42,7 +42,7 @@ Dim $OKButton
 Main()
 
 Func Main()
-   $Disk = FindSourceDrive()
+   FindSourceDrive()
    GetEntries()
    BuildGUI()
 
@@ -161,7 +161,6 @@ EndFunc
 
 Func FindSourceDrive()
    Local $drives = DriveGetDrive($DT_ALL)
-   Local $Disk
 
    If Not @error Then
 	  For $i = 1 to $drives[0]
