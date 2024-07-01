@@ -28,7 +28,7 @@ Dim $CleanupCMD = IniRead($INILocation, "General", "CleanupCMD", "")
 Dim $ColumnWidth = Int(IniRead($INILocation, "General", "ColumnWidth", "250"))
 Dim $HiddenState = IniRead($INILocation, "General", "StartHidden", "0")
 Dim $AlwaysOnTop = IniRead($INILocation, "General", "AlwaysOnTop", "0")
-Dim $UnattendedPreset = ""
+Dim $UnattendedPreset = -1
 
 ; Global runtime variables
 Dim $NumberofEntries = 0
@@ -47,7 +47,7 @@ Func Main()
 	GetEntries()
 	BuildGUI()
 
-	If $UnattendedPreset <> "" Then
+	If $UnattendedPreset > -1 Then
 		Install()
 		Exit (0)
 	EndIf
@@ -115,7 +115,7 @@ Func BuildGUI()
 	GUICtrlSetOnEvent($OKButton, "InstallButton")
 	GUICtrlSetOnEvent($InfoButton, "Info")
 	GUICtrlSetOnEvent($SelectNone, "Clear")
-	If $UnattendedPreset <> "" Then
+	If $UnattendedPreset > -1 Then
 		activatePreset($UnattendedPreset + 1)
 	Else
 		activatePreset(1)
