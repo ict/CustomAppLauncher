@@ -18,6 +18,8 @@ FileChangeDir(@ScriptDir)
 ; Global Settings
 Dim $GUItitle = IniRead($INILocation, "General", "Title", "1337 App Installer")
 Dim $GUIIcon = IniRead($INILocation, "General", "Icon", "")
+Dim $GUISelectNoneText = IniRead($INILocation, "General", "TextPresetNone", "&None")
+
 Dim $GUIHandle
 Dim $SoftwarePerPage = IniRead($INILocation, "General", "SoftwarePerRow", 20)
 Dim $SortEntries = IniRead($INILocation, "General", "SortEntries", 1)
@@ -101,8 +103,7 @@ Func BuildGUI()
 	Local $SelectMenu = GUICtrlCreateMenu("&Presets")
 	Local $AboutMenu = GUICtrlCreateMenu("&About")
 	Local $InfoButton = GUICtrlCreateMenuItem("About..", $AboutMenu)
-	Local $SelectText = IniRead($INILocation, "General", "TextPresetNone", "&None")
-	Local $SelectNone = GUICtrlCreateMenuItem($SelectText, $SelectMenu)
+	Local $SelectNone = GUICtrlCreateMenuItem($GUISelectNoneText, $SelectMenu)
 
 	$ProgressBar = GUICtrlCreateProgress(10, $GUIheight - 50, $GUIwidth - 20, 25)
 
@@ -172,6 +173,8 @@ Func GetEntries()
 		If $uIndex > -1 Then
 			;MsgBox(0, "Unattended", "Using Preset " & $uIndex)
 			$UnattendedPreset = $uIndex
+		ElseIf $uPreset = StringReplace($GUISelectNoneText, "&", "") Then
+			Exit (0)
 		EndIf
 	EndIf
 
